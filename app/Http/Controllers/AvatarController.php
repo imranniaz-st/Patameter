@@ -45,40 +45,41 @@ public function create(Request $request)
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        // Validate the request data
-        // $validatedData = $request->validate([
-        //     'agent_id' => 'required',
-        //     'lead_id' => 'required',
-        //     'dialer_id' => 'required',
-        //     'AGE' => 'required',
-        //     'Smoker' => 'required',
-        //     'verifier' => 'required',
-        //     'center' => 'required',
-        //     'phone_number' => 'required',
-        //     'link' => 'required',
-        // ]);
+{
+    $closedCall = new AvatarLead;
+    $closedCall->agent_id = $request->agent_id;
+    $closedCall->lead_id = $request->lead_id;
+    $closedCall->dailer_no = $request->dailer_no;
+    $closedCall->age = $request->AGE;
+    
+    // Convert 'No' to 0 (false) and 'Yes' to 1 (true) for the smoker field
+    $closedCall->smoker = $request->Smoker === 'Yes' ? 1 : 0;
+    
+    $closedCall->verifier_name = $request->verifier_name;
+    $closedCall->center = $request->center;
 
-        // Logic for storing the newly created resource
-        // For example:
-        // AvatarLead::create($validatedData);
-        $closedCall = new AvatarLead;
-        $closedCall->agent_id = $request->agent_id;
-        $closedCall->lead_id = $request->lead_id;
-        $closedCall->dialer_id = $request->dialer_id;
-        $closedCall->AGE = $request->AGE;
-        $closedCall->Smoker = $request->Smoker;
-        $closedCall->verifier = $request->verifier;
-        $closedCall->center = $request->center;
-        $closedCall->phone_number = $request->phone_number;
-        $closedCall->link = $request->link;
-        $closedCall->save();
-
-        // Redirect to a success page or route
-        return redirect()->route('welcome')->with('success', 'Avatar lead created successfully.');
+    // Assuming you have a User model with 'name' field
+    // You can fetch the agent name from the User model using agent_id
+    $agent = User::find($request->agent_id);
+    if ($agent) {
+        $closedCall->agent_name = $agent->name;
+    } else {
+        // If agent_id is not valid, you may handle this case accordingly
+        // For example, you may set a default agent name or throw an error
+        $closedCall->agent_name = 'Unknown Agent';
     }
+
+    $closedCall->save();
+
+    // Redirect to a success page or route
+    return redirect()->route('welcome')->with('success', 'Avatar lead created successfully.');
+}
+
+    
 
     
 
     // Other methods for showing, editing, updating, and deleting resources
 }
+
+ 

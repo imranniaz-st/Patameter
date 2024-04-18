@@ -4,28 +4,29 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateAvatarLeadsTable extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * @return void
      */
     public function up()
     {
         Schema::create('avatar_leads', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('agent_id');
-            $table->string('lead_id');
-            $table->string('dialer_id');
-            $table->string('AGE');
-            $table->string('Smoker');
-            $table->string('verifier');
+            $table->string('agent_name');
+            $table->boolean('smoker')->default(false);
+            $table->integer('age');
+            $table->string('verifier_name');
+            $table->string('dailer_no');
             $table->string('center');
-            $table->string('phone_number');
-            $table->string('link');
-            $table->timestamps();
 
-            // Foreign key constraints
-           
+            // Foreign key constraint for agent_id
+            $table->foreign('agent_id')->references('id')->on('agents')->onDelete('cascade');
+
+            $table->timestamps();
         });
     }
 
@@ -38,4 +39,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('avatar_leads');
     }
-};
+}
