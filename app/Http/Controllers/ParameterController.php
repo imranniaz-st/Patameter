@@ -5,38 +5,64 @@ use App\Models\AvatarLead;
 
 use Illuminate\Http\Request;
 
+
 class ParameterController extends Controller
 {
+     
+ 
+ 
     public function store(Request $request)
     {
-        $closedCall = new AvatarLead;
-        $closedCall->agent_id = $request->agent_id;
-        $closedCall->lead_id = $request->lead_id;
-        $closedCall->dailer_no = $request->dailer_no;
-        $closedCall->age = $request->AGE;
-        
-        // Convert 'No' to 0 (false) and 'Yes' to 1 (true) for the smoker field
-        $closedCall->smoker = $request->Smoker === 'Yes' ? 1 : 0;
-        
-        $closedCall->verifier_name = $request->verifier_name;
-        $closedCall->center = $request->center;
-    
-        // Assuming you have a User model with 'name' field
-        // You can fetch the agent name from the User model using agent_id
-        $agent = User::find($request->agent_id);
-        if ($agent) {
-            $closedCall->agent_name = $agent->name;
-        } else {
-            // If agent_id is not valid, you may handle this case accordingly
-            // For example, you may set a default agent name or throw an error
-            $closedCall->agent_name = 'Unknown Agent';
-        }
-    
-        $closedCall->save();
-    
-        // Redirect to a success page or route
+        dd($request->all());
+        // Create a new AvatarLead instance
+        $avatarLead = new AvatarLead;
+
+        // Fill the AvatarLead instance with data from the request
+        $avatarLead->agent_id = $request->agent_id;
+        $avatarLead->agent_name = $request->agent_name;
+        $avatarLead->lead_id = $request->lead_id;
+        $avatarLead->dailer_no = $request->dailer_no;
+        $avatarLead->age = $request->AGE;
+        $avatarLead->verifier_name = $request->verifier_name;
+        $avatarLead->center = $request->center;
+        $avatarLead->list_id = $request->list_id;
+        $avatarLead->recording_filename = $request->recording_filename;
+        $avatarLead->phone_number = $request->phone_number;
+        $avatarLead->campaign = $request->campaign;
+        $avatarLead->closer = $request->closer;
+        $avatarLead->group_a = $request->group_a;
+        $avatarLead->server_ip = $request->server_ip;
+        $avatarLead->dispo = $request->dispo;
+        $avatarLead->recording_id = $request->recording_id;
+        $avatarLead->entry_list_id = $request->entry_list_id;
+        $avatarLead->user_group = $request->user_group;
+        $avatarLead->list_name = $request->list_name;
+        $avatarLead->list_description = $request->list_description;
+        $avatarLead->entry_date = $request->entry_date;
+        $avatarLead->closer_name = $request->closer_name;
+        $avatarLead->dialername = $request->dialername;
+        $avatarLead->centername = $request->centername;
+        $avatarLead->xferSubmission = $request->xferSubmission;
+
+        // Construct and save the recording link
+        $recordingLink = "http://{$request->server_ip}/RECORDINGS/MP3/{$request->recording_filename}-all.mp3";
+        $avatarLead->recording_link = $recordingLink;
+
+        // Save the AvatarLead instance to the database
+        $avatarLead->save();
+
+        // Redirect back to the form with a success message
         return redirect()->route('display')->with('success', 'Avatar lead created successfully.');
     }
+
+    // Other methods...
+ 
+
+
+
+    // Other methods...
+ 
+ 
 
     public function create(Request $request)
 {
@@ -49,6 +75,7 @@ class ParameterController extends Controller
     $agent_id = $request->input('agent_id');
     $lead_id = $request->input('lead_id');
     $center = $request->input('center');
+    
 
     // Return the view with the form and the pre-filled data
     return view('display', compact('agents', 'verifiers', 'agent_id', 'lead_id', 'center'));
