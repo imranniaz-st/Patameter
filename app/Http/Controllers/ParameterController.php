@@ -12,19 +12,19 @@ class ParameterController extends Controller
  
  
     public function store(Request $request)
+
     {
-        dd($request->all());
+        // dd($request->all());
         // Create a new AvatarLead instance
         $avatarLead = new AvatarLead;
-
-        // Fill the AvatarLead instance with data from the request
         $avatarLead->agent_id = $request->agent_id;
         $avatarLead->agent_name = $request->agent_name;
-        $avatarLead->lead_id = $request->lead_id;
-        $avatarLead->dailer_no = $request->dailer_no;
-        $avatarLead->age = $request->AGE;
+        $avatarLead->smoker = $request->smoker;
+        $avatarLead->age = $request->age;
         $avatarLead->verifier_name = $request->verifier_name;
+        $avatarLead->dailer_no = $request->dailer_no;
         $avatarLead->center = $request->center;
+        $avatarLead->lead_id = $request->lead_id;
         $avatarLead->list_id = $request->list_id;
         $avatarLead->recording_filename = $request->recording_filename;
         $avatarLead->phone_number = $request->phone_number;
@@ -43,17 +43,18 @@ class ParameterController extends Controller
         $avatarLead->dialername = $request->dialername;
         $avatarLead->centername = $request->centername;
         $avatarLead->xferSubmission = $request->xferSubmission;
-
+    
         // Construct and save the recording link
         $recordingLink = "http://{$request->server_ip}/RECORDINGS/MP3/{$request->recording_filename}-all.mp3";
-        $avatarLead->recording_link = $recordingLink;
-
+        $avatarLead->recordingLink = $recordingLink;
+    
         // Save the AvatarLead instance to the database
         $avatarLead->save();
-
+    
         // Redirect back to the form with a success message
-        return redirect()->route('display')->with('success', 'Avatar lead created successfully.');
+        return redirect()->route('display', ['lead_id' => $request->lead_id])->with('success', 'Avatar lead created successfully.');
     }
+    
 
     // Other methods...
  
@@ -75,11 +76,34 @@ class ParameterController extends Controller
     $agent_id = $request->input('agent_id');
     $lead_id = $request->input('lead_id');
     $center = $request->input('center');
-    
+    $server_ip = $request->input('server_ip');
+    $agent_name = $request->input('agent_name');
+    $smoker = $request->input('smoker');
+    $age = $request->input('age');
+    $verifier_name = $request->input('verifier_name');
+    $dailer_no = $request->input('dailer_no');
+    $list_id = $request->input('list_id');
+    $recording_filename = $request->input('recording_filename');
+    $phone_number = $request->input('phone_number');
+    $campaign = $request->input('campaign');
+    $closer = $request->input('closer');
+    $group_a = $request->input('group_a');
+    $dispo = $request->input('dispo');
+    $recording_id = $request->input('recording_id');
+    $entry_list_id = $request->input('entry_list_id');
+    $user_group = $request->input('user_group');
+    $list_name = $request->input('list_name');
+    $list_description = $request->input('list_description');
+    $entry_date = $request->input('entry_date');
+    $closer_name = $request->input('closer_name');
+    $dialername = $request->input('dialername');
+    $centername = $request->input('centername');
 
     // Return the view with the form and the pre-filled data
-    return view('display', compact('agents', 'verifiers', 'agent_id', 'lead_id', 'center'));
+    return view('display', compact('agents', 'verifiers', 'agent_id', 'lead_id', 'center', 'server_ip', 'agent_name', 'smoker', 'age', 'verifier_name', 'dailer_no', 'list_id', 'recording_filename', 'phone_number', 'campaign', 'closer', 'group_a', 'dispo', 'recording_id', 'entry_list_id', 'user_group', 'list_name', 'list_description', 'entry_date', 'closer_name', 'dialername', 'centername'));
 }
+
+
 
     public function display(Request $request)
     {
@@ -121,6 +145,7 @@ class ParameterController extends Controller
         $group_a = $request->input('group');
         $channel_group = $request->input('channel_group');
         $SQLdate = $request->input('SQLdate');
+        // dd($SQLdate);
         $epoch = $request->input('epoch');
         $uniqueid = $request->input('uniqueid');
         $customer_zap_channel = $request->input('customer_zap_channel');
@@ -185,6 +210,7 @@ class ParameterController extends Controller
         $hide_relogin_fields = $request->input('hide_relogin_fields');
         $web_vars = $request->input('web_vars');
         $session_name = $request->input('session_name');
+        
 
         return view('display', [
             'currentDateTime'  =>  $currentDateTime,

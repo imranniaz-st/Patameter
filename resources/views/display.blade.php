@@ -12,55 +12,102 @@
         <p>CURRENTDATETIME: {{$currentDateTime}}</p>
         
         <!-- Form start -->
-        <form action="{{ route('avatar_leads.store') }}" method="POST">
-            @csrf <!-- CSRF token for Laravel -->
-            <p>LEAD ID: <input type="text" name="lead_id" value="{{$lead_id}}"></p>
-             <p>CLOSER: <input type="text" name="closer" value="{{$closer}}"></p>
-            <div class="form-group">
-                <label for="agent_id">Agent ID</label>
-                <input type="text" class="form-control" id="agent_id" name="agent_id" placeholder="Agent ID" >
-            </div>
-            <div class="form-group">
-                <label for="agent_id">Agent Name</label>
-                <input type="text" class="form-control" id="agent_name" name="agent_name" placeholder="Agent ID"  >
-            </div>
-            <div class="form-group">
-                <label for="lead_id">Lead ID</label>
-                <input type="text" class="form-control" id="lead_id" name="lead_id" placeholder="Lead ID"  >
-            </div>
-            <div class="form-group">
-                <label for="dialer_id">Dialer ID</label>
-                <input type="text" class="form-control" id="dialer_id" name="dailer_no" placeholder="Dialer ID"  >
-            </div>
-            <div class="form-group">
-                <label for="AGE">AGE</label>
-                <input type="text" class="form-control" id="AGE" name="AGE" placeholder="AGE" >
-            </div>
-            <div class="form-group">
-                <label for="verifier">Verifier</label>
-                <input type="text" class="form-control" id="verifier_name" name="verifier_name" placeholder="Verifier"  >
-            </div>
-            <div class="form-group">
-                <label for="center">Center</label>
-                <input type="text" class="form-control" id="center" name="center" placeholder="Center"  >
-            </div>
- 
-            <?php
-            $closercode = strtolower(substr($closer, 0, 3));
+       
+            <!-- Form start -->
+            <form action="{{ route('avatar_leads.store') }}" method="POST">
+                @csrf <!-- CSRF token for Laravel -->
+                <p>LEAD ID: <input disabled type="text" name="lead_id" value="{{$lead_id}}"></p>
+                 <p>CLOSER: <input type="text" name="closer" value="{{$closer}}"></p>
+                <div class="form-group">
+                    <label   for="agent_id">Agent ID</label>
+                    <input type="text" class="form-control" id="agent_id" name="agent_id" placeholder="Agent ID" value="12345">
+                </div>
+                <div class="form-group">
+                    <label for="agent_id">Agent Name</label>
+                    <input type="text" class="form-control" id="agent_name" name="agent_name" placeholder="Agent ID" value="ali ">
+                </div>
+                <div class="form-group">
+                    <label for="lead_id">Lead ID</label>
+                    <input type="text" class="form-control" id="lead_id" name="lead_id" placeholder="Lead ID" value="67890">
+                </div>
+                <div class="form-group">
+                    <label for="dialer_id">Dialer ID</label>
+                    <input type="text" class="form-control" id="dialer_id" name="dailer_no" placeholder="Dialer ID" value="ABCDE">
+                </div>
+                <div class="form-group">
+                    <label for="dialer_id">smoker</label>
+                    <input type="text" class="form-control" id="smoker" name="smoker" placeholder="smoker" >
+                </div>
+                <div class="form-group">
+                    <label for="AGE">AGE</label>
+                    <input type="text" class="form-control" id="AGE" name="AGE" placeholder="AGE" value="30">
+                </div>
+                <div class="form-group">
+                    <label for="verifier">Verifier</label>
+                    <input type="text" class="form-control" id="verifier_name" name="verifier_name" placeholder="Verifier" value="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="center">Center</label>
+                    <input type="text" class="form-control" id="center" name="center" placeholder="Center" value="ABC Center">
+                </div>
+                <?php
+                $closercode = strtolower(substr($closer, 0, 3));
+    
+                if ($closercode == "emp") {
+                    echo "<p>CENTER: <input type='text' name='center' value='J.Sons Communication'></p>";
+                } else if ($closercode == "slz") {
+                    echo "<p>CENTER: <input type='text' name='center' value='Sellerz'></p>";
+                } else {
+                    echo "Error";
+                }
+                ?>  
+                                  <input type="text"   name="recording_link" id="recording_link" class="form-control" value="http://{{$server_ip}}/RECORDINGS/MP3/{{$SQLdate}}_{{$lead_id}}-all.mp3" target="_blank">http://{{$server_ip}}/RECORDINGS/MP3/{{$recording_filename}}-all.mp3</input> 
 
-            if ($closercode == "emp") {
-                echo "<p>CENTER: <input type='text' name='center' value='J.Sons Communication'></p>";
-            } else if ($closercode == "slz") {
-                echo "<p>CENTER: <input type='text' name='center' value='Sellerz'></p>";
-            } else {
-                echo "Error";
-            }
-            ?>  
-                    <p>RECORDING LINK: <a name="recording_link" id="recording_link" class="form-control" placeholder="http://{{$server_ip}}/RECORDINGS/MP3/{{$recording_filename}}-all.mp3" target="_blank">http://{{$server_ip}}/RECORDINGS/MP3/{{$recording_filename}}-all.mp3</a></p>
-                    <button type="submit">Submit</button> <!-- Submit button -->
-                </form>
-         
+                
+                <button type="submit">Submit</button> <!-- Submit button -->
+            </form>
+            <!-- Form end -->
       
+    
+
+            
+        </form>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Function to handle click event on recording link
+                function handleRecordingLinkClick(event) {
+                    event.preventDefault(); // Prevent default link behavior
+    
+                    // Extract parameters from the URL
+                    var url = event.target.href;
+                    var params = new URLSearchParams(url.split('?')[1]);
+    
+                    // Extract necessary parameters
+                    var leadId = params.get('lead_id');
+                    var closer = params.get('closer');
+    
+                    // Send AJAX request to Laravel backend
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', '{{ route("avatar_leads.store") }}', true);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status === 200) {
+                                console.log('Data saved successfully');
+                            } else {
+                                console.error('Error saving data');
+                            }
+                        }
+                    };
+                    xhr.send(JSON.stringify({ lead_id: leadId, closer: closer }));
+                }
+    
+                // Attach click event listener to the recording link
+                document.getElementById('recording_link').addEventListener('click', handleRecordingLinkClick);
+            });
+        </script>
+        <!-- Form end -->
+    </div>
 {{----}}<h1> Other Details </h1>
 
 <p>VENDOR ID: {{$vendor_id}}</p>
@@ -164,8 +211,6 @@
 <p>HIDE RELOGIN FIELDS: {{$hide_relogin_fields}}</p>
 <p>WEB VARS: {{$web_vars}}</p>
 <p>SESSION NAME: {{$session_name}}</p>
-
-
 </body>
 </html>
 

@@ -15,7 +15,7 @@ Route::get('/avatar_leads', [AvatarController::class, 'store'])->name('avatar_le
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
-Route::get('/display', [ParameterController::class, 'display']);
+Route::get('/display', [ParameterController::class, 'display'])->name('display');
 
 // Define a route for getting data with parameters
  

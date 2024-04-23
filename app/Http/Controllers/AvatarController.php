@@ -30,9 +30,32 @@ public function create(Request $request)
     $agent_id = $request->input('agent_id');
     $lead_id = $request->input('lead_id');
     $center = $request->input('center');
+    $server_ip = $request->input('server_ip');
+    $agent_name = $request->input('agent_name');
+    $smoker = $request->input('smoker');
+    $age = $request->input('age');
+    $verifier_name = $request->input('verifier_name');
+    $dailer_no = $request->input('dailer_no');
+    $list_id = $request->input('list_id');
+    $recording_filename = $request->input('recording_filename');
+    $phone_number = $request->input('phone_number');
+    $campaign = $request->input('campaign');
+    $closer = $request->input('closer');
+    $group_a = $request->input('group_a');
+    $dispo = $request->input('dispo');
+    $recording_id = $request->input('recording_id');
+    $entry_list_id = $request->input('entry_list_id');
+    $user_group = $request->input('user_group');
+    $list_name = $request->input('list_name');
+    $list_description = $request->input('list_description');
+    $entry_date = $request->input('entry_date');
+    $closer_name = $request->input('closer_name');
+    $dialername = $request->input('dialername');
+    $centername = $request->input('centername');
+    $recording_link = $request->input('recording_link');
 
     // Return the view with the form and the pre-filled data
-    return view('avatar.create', compact('agents', 'verifiers', 'agent_id', 'lead_id', 'center'));
+    return view('display', compact('agents', 'verifiers', 'agent_id', 'lead_id', 'center', 'server_ip', 'agent_name', 'smoker', 'age', 'verifier_name', 'dailer_no', 'list_id', 'recording_filename', 'phone_number', 'campaign', 'closer', 'group_a', 'dispo', 'recording_id', 'entry_list_id', 'user_group', 'list_name', 'list_description', 'entry_date', 'closer_name', 'dialername', 'centername'));
 }
 
 
@@ -45,35 +68,52 @@ public function create(Request $request)
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    $closedCall = new AvatarLead;
-    $closedCall->agent_id = $request->agent_id;
-    $closedCall->lead_id = $request->lead_id;
-    $closedCall->dailer_no = $request->dailer_no;
-    $closedCall->age = $request->AGE;
-    
-    // Convert 'No' to 0 (false) and 'Yes' to 1 (true) for the smoker field
-    $closedCall->smoker = $request->Smoker === 'Yes' ? 1 : 0;
-    
-    $closedCall->verifier_name = $request->verifier_name;
-    $closedCall->center = $request->center;
 
-    // Assuming you have a User model with 'name' field
-    // You can fetch the agent name from the User model using agent_id
-    $agent = User::find($request->agent_id);
-    if ($agent) {
-        $closedCall->agent_name = $agent->name;
-    } else {
-        // If agent_id is not valid, you may handle this case accordingly
-        // For example, you may set a default agent name or throw an error
-        $closedCall->agent_name = 'Unknown Agent';
+    {
+        // dd($request->all());
+        // Create a new AvatarLead instance
+        $avatarLead = new AvatarLead;
+        $avatarLead->agent_id = $request->agent_id;
+        $avatarLead->agent_name = $request->agent_name;
+        $avatarLead->smoker = $request->smoker;
+        $avatarLead->age = $request->age;
+        $avatarLead->verifier_name = $request->verifier_name;
+        $avatarLead->dailer_no = $request->dailer_no;
+        $avatarLead->center = $request->center;
+        $avatarLead->lead_id = $request->lead_id;
+        $avatarLead->list_id = $request->list_id;
+        $avatarLead->recording_filename = $request->recording_filename;
+        $avatarLead->phone_number = $request->phone_number;
+        $avatarLead->campaign = $request->campaign;
+        $avatarLead->closer = $request->closer;
+        $avatarLead->group_a = $request->group_a;
+        $avatarLead->server_ip = $request->server_ip;
+        $avatarLead->dispo = $request->dispo;
+        $avatarLead->recording_id = $request->recording_id;
+        $avatarLead->entry_list_id = $request->entry_list_id;
+        $avatarLead->user_group = $request->user_group;
+        $avatarLead->list_name = $request->list_name;
+        $avatarLead->list_description = $request->list_description;
+        $avatarLead->entry_date = $request->entry_date;
+        $avatarLead->closer_name = $request->closer_name;
+        $avatarLead->dialername = $request->dialername;
+        $avatarLead->centername = $request->centername;
+        $avatarLead->xferSubmission = $request->xferSubmission;
+        $avatarLead->recording_link = $request->recording_link;
+    
+        // Construct and save the recording link
+        
+      
+    
+        // Save the AvatarLead instance to the database
+        $avatarLead->save();
+    
+        // Redirect back to the form with a success message
+        return redirect()->route('display', ['lead_id' => $request->lead_id])->with('success', 'Avatar lead created successfully.');
     }
+    
 
-    $closedCall->save();
-
-    // Redirect to a success page or route
-    return redirect()->route('welcome')->with('success', 'Avatar lead created successfully.');
-}
+    // Other methods...
 
     
 
