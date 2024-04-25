@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class ParameterController extends Controller
 {
      
- 
+  
  
     public function store(Request $request)
 
@@ -87,6 +87,7 @@ class ParameterController extends Controller
     $phone_number = $request->input('phone_number');
     $campaign = $request->input('campaign');
     $closer = $request->input('closer');
+    $group = $request->input('group');
     $group_a = $request->input('group_a');
     $dispo = $request->input('dispo');
     $recording_id = $request->input('recording_id');
@@ -99,10 +100,91 @@ class ParameterController extends Controller
     $dialername = $request->input('dialername');
     $centername = $request->input('centername');
 
-    // Return the view with the form and the pre-filled data
-    return view('display', compact('agents', 'verifiers', 'agent_id', 'lead_id', 'center', 'server_ip', 'agent_name', 'smoker', 'age', 'verifier_name', 'dailer_no', 'list_id', 'recording_filename', 'phone_number', 'campaign', 'closer', 'group_a', 'dispo', 'recording_id', 'entry_list_id', 'user_group', 'list_name', 'list_description', 'entry_date', 'closer_name', 'dialername', 'centername'));
-}
+    // Add missing parameters
+    $vendor_id = $request->input('vendor_id');
+    $gmt_offset_now = $request->input('gmt_offset_now');
+    $phone_code = $request->input('phone_code');
+    $title = $request->input('title');
+    $first_name = $request->input('first_name');
+    $middle_initial = $request->input('middle_initial');
+    $last_name = $request->input('last_name');
+    $address1 = $request->input('address1');
+    $address2 = $request->input('address2');
+    $address3 = $request->input('address3');
+    $city = $request->input('city');
+    $state = $request->input('state');
+    $province = $request->input('province');
+    $postal_code = $request->input('postal_code');
+    $country_code = $request->input('country_code');
+    $gender = $request->input('gender');
+    $date_of_birth = $request->input('date_of_birth');
+    $alt_phone = $request->input('alt_phone');
+    $email = $request->input('email');
+    $security_phrase = $request->input('security_phrase');
+    $comments = $request->input('comments');
+    $user = $request->input('user');
+    $pass = $request->input('pass');
+    $orig_pass = $request->input('orig_pass');
+    $phone_login = $request->input('phone_login');
+    $original_phone_login = $request->input('original_phone_login');
+    $phone_pass = $request->input('phone_pass');
+    $fronter = $request->input('fronter');
+    $channel_group = $request->input('channel_group');
+    $SQLdate = $request->input('SQLdate');
+    $epoch = $request->input('epoch');
+    $uniqueid = $request->input('uniqueid');
+    $customer_zap_channel = $request->input('customer_zap_channel');
+    $customer_server_ip = $request->input('customer_server_ip');
+    $SIPexten = $request->input('SIPexten');
+    $session_id = $request->input('session_id');
+    $dialed_number = $request->input('dialed_number');
+    $dialed_label = $request->input('dialed_label');
+    $source_id = $request->input('source_id');
+    $rank = $request->input('rank');
+    $owner = $request->input('owner');
+    $camp_script = $request->input('camp_script');
+    $in_script = $request->input('in_script');
+    $in_script_two = $request->input('in_script_two');
+    $script_width = $request->input('script_width');
+    $script_height = $request->input('script_height');
+    $agent_email = $request->input('agent_email');
+    $recording_filename = $request->input('recording_filename');
+    $recording_id = $request->input('recording_id');
+    $user_custom_one = $request->input('user_custom_one');
+    $user_custom_two = $request->input('user_custom_two');
+    $user_custom_three = $request->input('user_custom_three');
+    $user_custom_four = $request->input('user_custom_four');
+    $user_custom_five = $request->input('user_custom_five');
+    $preset_number_a = $request->input('preset_number_a');
+    $preset_number_b = $request->input('preset_number_b');
+    $preset_number_c = $request->input('preset_number_c');
+    $preset_number_d = $request->input('preset_number_d');
+    $preset_number_e = $request->input('preset_number_e');
+    $preset_dtmf_a = $request->input('preset_dtmf_a');
+    $preset_dtmf_b = $request->input('preset_dtmf_b');
+    $did_id = $request->input('did_id');
+    $did_extension = $request->input('did_extension');
+    $did_pattern = $request->input('did_pattern');
+    $did_description = $request->input('did_description');
+    $closecallid = $request->input('closecallid');
+    $xfercallid = $request->input('xfercallid');
+    $agent_log_id = $request->input('agent_log_id');
+    $call_id = $request->input('call_id');
+    $list_description = $request->input('list_description');
+    $called_count = $request->input('called_count');
+    $email_row_id = $request->input('email_row_id');
+    $LOGINvarONE = $request->input('LOGINvarONE');
+    $LOGINvarTWO = $request->input('LOGINvarTWO');
+    $LOGINvarTHREE = $request->input('LOGINvarTHREE');
+    $LOGINvarFOUR = $request->input('LOGINvarFOUR');
+    $LOGINvarFIVE = $request->input('LOGINvarFIVE');
+    $hide_relogin_fields = $request->input('hide_relogin_fields');
+    $web_vars = $request->input('web_vars');
+    $session_name = $request->input('session_name');
 
+    // Return the view with the form and the pre-filled data
+    return view('display', compact('agents', 'verifiers', 'agent_id', 'lead_id', 'center', 'server_ip', 'agent_name', 'smoker', 'age', 'verifier_name', 'dailer_no', 'list_id', 'recording_filename', 'phone_number', 'campaign', 'closer', 'group_a', 'dispo', 'recording_id', 'entry_list_id', 'user_group', 'list_name', 'list_description', 'entry_date', 'closer_name', 'dialername', 'centername', 'vendor_id', 'gmt_offset_now', 'phone_code', 'title', 'first_name', 'middle_initial', 'last_name', 'address1', 'address2', 'address3', 'city', 'state', 'province', 'postal_code', 'country_code', 'gender', 'date_of_birth', 'alt_phone', 'email', 'security_phrase', 'comments', 'user', 'pass', 'orig_pass', 'phone_login', 'original_phone_login', 'phone_pass', 'fronter', 'channel_group', 'SQLdate', 'epoch', 'uniqueid', 'customer_zap_channel', 'customer_server_ip', 'SIPexten', 'session_id', 'dialed_number', 'dialed_label', 'source_id', 'rank', 'owner', 'camp_script', 'in_script', 'in_script_two', 'script_width', 'script_height', 'agent_email', 'recording_filename', 'recording_id', 'user_custom_one', 'user_custom_two', 'user_custom_three', 'user_custom_four', 'user_custom_five', 'preset_number_a', 'preset_number_b', 'preset_number_c', 'preset_number_d', 'preset_number_e', 'preset_dtmf_a', 'preset_dtmf_b', 'did_id', 'did_extension', 'did_pattern', 'did_description', 'closecallid', 'xfercallid', 'agent_log_id', 'call_id', 'list_description', 'called_count', 'email_row_id', 'LOGINvarONE', 'LOGINvarTWO', 'LOGINvarTHREE', 'LOGINvarFOUR', 'LOGINvarFIVE', 'hide_relogin_fields', 'web_vars', 'session_name'));
+}
 
 
     public function display(Request $request)
