@@ -23,6 +23,7 @@ class CreateAvatarLeadsTable extends Migration
             $table->text('phone_number')->nullable();
             $table->text('title')->nullable();
             $table->text('first_name')->nullable();
+            $table->text('fullname')->nullable();
             $table->text('middle_initial')->nullable();
             $table->text('last_name')->nullable();
             $table->text('address1')->nullable();

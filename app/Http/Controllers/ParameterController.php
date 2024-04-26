@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 use App\Models\AvatarLead; 
-
+use App\Models\AvatarQa;
+use App\Models\Dialerlist;
+use App\Models\CenterList;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 
@@ -16,9 +19,11 @@ class ParameterController extends Controller
     {
         // dd($request->all());
         // Create a new AvatarLead instance
+       
         $avatarLead = new AvatarLead;
         $avatarLead->agent_id = $request->agent_id;
         $avatarLead->agent_name = $request->agent_name;
+        $avatarLead->owner = $request->owner;
         $avatarLead->smoker = $request->smoker;
         $avatarLead->age = $request->age;
         $avatarLead->verifier_name = $request->verifier_name;
@@ -52,7 +57,7 @@ class ParameterController extends Controller
         $avatarLead->save();
     
         // Redirect back to the form with a success message
-        return redirect()->route('display', ['lead_id' => $request->lead_id])->with('success', 'Avatar lead created successfully.');
+        return redirect()->route('display', ['lead_id' => $request->lead_id],['dialerMatch' => $dialerMatch])->with('success', 'Avatar lead created successfully.');
     }
     
 
@@ -189,6 +194,7 @@ class ParameterController extends Controller
 
     public function display(Request $request)
     {
+        
         // Extract data from the form submission
         $currentDateTime = now();
         $lead_id = $request->input('lead_id');
@@ -232,7 +238,6 @@ class ParameterController extends Controller
         $uniqueid = $request->input('uniqueid');
         $customer_zap_channel = $request->input('customer_zap_channel');
         $customer_server_ip = $request->input('customer_server_ip');
-        $server_ip = $request->input('server_ip');
         $SIPexten = $request->input('SIPexten');
         $session_id = $request->input('session_id');
         $phone = $request->input('phone');
@@ -243,6 +248,7 @@ class ParameterController extends Controller
         $source_id = $request->input('source_id');
         $rank = $request->input('rank');
         $ownern = $request->input('ownern');
+        $owner = $request->input('owner');
         $camp_script = $request->input('camp_script');
         $in_script = $request->input('in_script');
         $in_script_two = $request->input('in_script_two');
@@ -292,6 +298,12 @@ class ParameterController extends Controller
         $hide_relogin_fields = $request->input('hide_relogin_fields');
         $web_vars = $request->input('web_vars');
         $session_name = $request->input('session_name');
+        $server_ip = $request->input('server_ip');
+        $closercode = Str::lower(Str::substr($closer, 0, 3));
+        $dialerMatch = DialerList::where('dialer_ip', $server_ip)->value('dialer_no');
+        $centerMatch = CenterList::where('centerCode', $closercode)->value('centerName');
+
+        
         
 
         return view('display', [
@@ -347,6 +359,7 @@ class ParameterController extends Controller
             'source_id' =>$source_id,
             'rank' =>$rank,
             'ownern' =>$ownern,
+            'owner' =>$owner,
             'camp_script' =>$camp_script,
             'in_script' =>$in_script,
             'in_script_two' =>$in_script_two,
@@ -395,7 +408,12 @@ class ParameterController extends Controller
             'LOGINvarFIVE' =>$LOGINvarFIVE,
             'hide_relogin_fields' =>$hide_relogin_fields,
             'web_vars' =>$web_vars,
-            'session_name' =>$session_name
+            'session_name' =>$session_name,
+            'currentDateTime' => $currentDateTime,
+            'server_ip' => $server_ip,
+            'dialerMatch' => $dialerMatch,
+            'centerMatch'=> $centerMatch,
+
         ]);
 
     }

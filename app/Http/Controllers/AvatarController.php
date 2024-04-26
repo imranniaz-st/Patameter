@@ -6,6 +6,9 @@ use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use App\Models\User; // Assuming you have a User model
 use App\Models\AvatarLead; // Assuming you have an AvatarLead model
+use App\Models\AvatarFrom; // Assuming you have an AvatarFrom model
+use App\Models\AvatarQa; // avatar_QA modle import 
+
 
 class AvatarController extends Controller  
 { 
@@ -44,6 +47,7 @@ public function create(Request $request)
     $closer = $request->input('closer');
     $group_a = $request->input('group_a');
     $dispo = $request->input('dispo');
+    $avatarLead = $owner->input('owner');
     $recording_id = $request->input('recording_id');
     $entry_list_id = $request->input('entry_list_id');
     $user_group = $request->input('user_group');
@@ -54,6 +58,8 @@ public function create(Request $request)
     $dialername = $request->input('dialername');
     $centername = $request->input('centername');
     $recording_link = $request->input('recording_link');
+
+
 
     // Return the view with the form and the pre-filled data
     return view('display', compact('agents', 'verifiers', 'agent_id', 'lead_id', 'center', 'server_ip', 'agent_name', 'smoker', 'age', 'verifier_name', 'dailer_no', 'list_id', 'recording_filename', 'phone_number', 'campaign', 'closer', 'group_a', 'dispo', 'recording_id', 'entry_list_id', 'user_group', 'list_name', 'list_description', 'entry_date', 'closer_name', 'dialername', 'centername'));
@@ -86,6 +92,7 @@ public function create(Request $request)
     $avatarLead->phone_number = $request->phone_number;
     $avatarLead->campaign = $request->campaign;
     $avatarLead->closer = $request->closer;
+    // $avatarLead->owner = $request->owner;
     $avatarLead->group_a = $request->group_a;
     $avatarLead->server_ip = $request->server_ip;
     $avatarLead->dispo = $request->dispo;
@@ -100,8 +107,6 @@ public function create(Request $request)
     $avatarLead->centername = $request->centername;
     $avatarLead->xferSubmission = $request->xferSubmission;
     $avatarLead->recording_link = $request->recording_link;
-    
-    // Add missing parameters
     $avatarLead->vendor_id = $request->vendor_id;
     $avatarLead->gmt_offset_now = $request->gmt_offset_now;
     $avatarLead->phone_code = $request->phone_code;
@@ -184,6 +189,63 @@ public function create(Request $request)
 
     // Save the AvatarLead instance to the database
     $avatarLead->save();
+
+    // savign Same Data in Avatar From 
+    $AvatarFrom = new AvatarFrom;
+    // Fill the AvatarFrom instance with data from the request
+    $AvatarFrom->lead_id = $request->lead_id;
+    $AvatarFrom->list_id = $request->list_id;
+    $AvatarFrom->phone_number = $request->phone_number;
+    $AvatarFrom->campaign = $request->campaign;
+    $AvatarFrom->closer = $request->closer;
+    $AvatarFrom->group_a = $request->group_a;
+    $AvatarFrom->server_ip = $request->server_ip;
+    $AvatarFrom->dispo = $request->dispo;
+    $AvatarFrom->agent_name = $request->agent_name;
+    $AvatarFrom->recording_filename = $request->recording_filename;
+    $AvatarFrom->recording_id = $request->recording_id;
+    $AvatarFrom->recording_link = $request->recording_link;
+    $AvatarFrom->entry_list_id = $request->entry_list_id;
+    $AvatarFrom->user_group = $request->user_group;
+    $AvatarFrom->list_name = $request->list_name;
+    $AvatarFrom->list_description = $request->list_description;
+    // $AvatarFrom->entry_date = $request->entry_date;
+    $AvatarFrom->closer_name = $request->closer_name;
+    $AvatarFrom->smoker = $request->smoker;
+    $AvatarFrom->age = $request->age;
+    $AvatarFrom->dialername = $request->dialername;
+    $AvatarFrom->centername = $request->centername;
+    $AvatarFrom->xferSubmission = $request->xferSubmission;
+    // Save the AvatarFrom instance to the database
+    $AvatarFrom->save();
+
+    $AvatarQa = new AvatarQa;
+    $AvatarQa->xferSubmissionTime = $request->input('xferSubmissionTime');
+    $AvatarQa->agent_name = $request->input('agent_name');
+    $AvatarQa->lead_id = $request->input('lead_id');
+    $AvatarQa->closer_name = $request->input('closer_name');
+    $AvatarQa->recording_link = $request->input('recording_link');
+    $AvatarQa->greetings = $request->input('greetings');
+    $AvatarQa->pitch = $request->input('pitch');
+    $AvatarQa->age = $request->input('age');
+    $AvatarQa->smoker = $request->input('smoker');
+    $AvatarQa->health = $request->input('health');
+    $AvatarQa->beneficiary = $request->input('beneficiary');
+    $AvatarQa->account = $request->input('account');
+    $AvatarQa->plan = $request->input('plan');
+    $AvatarQa->transfer_details = $request->input('transfer_details');
+    $AvatarQa->xfer_consent = $request->input('xfer_consent');
+    $AvatarQa->rebuttal = $request->input('rebuttal');
+    $AvatarQa->total_rebuttal = $request->input('total_rebuttal');
+    $AvatarQa->total_refusal = $request->input('total_refusal');
+    $AvatarQa->qa_comment = $request->input('qa_comment');
+    $AvatarQa->qa_person = $request->input('qa_person');
+    $AvatarQa->call_status = $request->input('call_status');
+    $AvatarQa->total_duration = $request->input('total_duration');
+    $AvatarQa->played_duration = $request->input('played_duration');
+    $AvatarQa->qa_timestamp = $request->input('qa_timestamp');
+    $AvatarQa->save();
+
 
     // Redirect back to the form with a success message
     return redirect()->route('display', ['lead_id' => $request->lead_id])->with('success', 'Avatar lead created successfully.');

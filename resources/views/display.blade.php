@@ -7,18 +7,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"></head>">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"></head>
    
 <body>
-  
-    <div class="container">
-        <h1>Xfer Form</h1>
-        <p>CURRENTDATETIME: {{$currentDateTime}}</p>
-        
-        <!-- Form start -->
-       
-            <!-- Form start -->
-            
             <div class="container">
                 <h1>Xfer Form</h1>
                 <p>CURRENTDATETIME: {{$currentDateTime}}</p>
@@ -26,9 +17,8 @@
                 <!-- Form start -->
                 <form action="{{ route('avatar_leads.store') }}" method="POST">
                     @csrf <!-- CSRF token for Laravel -->
-                    
-                    <div class="form-group">
-                        <label for="verifier">ID </label>
+                     <div class="form-group">
+                        <label for="verifier">Lead ID </label>
                         <input type="text" class="form-control" id="lead_id" name="lead_id" placeholder="Lead ID" value="{{$lead_id}}" >
                     </div>
                     
@@ -37,6 +27,7 @@
                         <input type="text" class="form-control" id="agent_name" name="agent_name" placeholder="Agent Name" value="{{$fullname}}" >
                     </div>
                     
+                     
                     <div class="form-group">
                         <label for="dialer_id">Dialer ID</label>
                     <input type="text" class="form-control" id="dialer_id" name="dailer_no" placeholder="Dialer ID" value="{{$closer}}">
@@ -47,29 +38,33 @@
                                 <option value="Yes">Yes</option>
                                 <option value="No">No</option>
                             </select>
+                            <select class="form-control" id="closer_name" name="closer_name">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="AGE">AGE</label>
-                            <input type="text" class="form-control" id="AGE" name="AGE" placeholder="AGE" value="30">
+                            <select class="form-control">
+                                <option disabled selected>Select</option>
+                                @for($i = 18; $i <= 100; $i++)
+                                <option value="{{ $i }}">{{ $i }}</option>
+                                @endfor
+                            
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="dialer">Dialer No</label>
+                            <input type="text" class="form-control" id="dialer_no" name="dialer_no" placeholder="dialer_no" value="{{ $dialerMatch }}">
+                            <label for="dialer">Center Name</label>
+                            <input type="text" class="form-control" id="dialer_no" name="dialer_no" placeholder="dialer_no" value="{{ $centerMatch }}">
                         </div>
                     </div>
-                     <input type="text"   name="recording_link" id="recording_link" class="form-control" value="http://{{$server_ip}}/RECORDINGS/MP3/{{$recording_filename}}-all.mp3" target="_blank">http://{{$server_ip}}/RECORDINGS/MP3/{{$recording_filename}}-all.mp3</input> 
-                     <?php
-                     $closercode = strtolower(substr($closer, 0, 3));
-         
-                     if ($closercode == "emp") {
-                         echo "<p>CENTER: <input type='text' name='center' value='J.Sons Communication'></p>";
-                     } else if ($closercode == "slz") {
-                         echo "<p>CENTER: <input type='text' name='center' value='Sellerz'></p>";
-                     } else {
-                         echo "Error";
-                     }
-                     ?>  
-                   
-
+                     
 <input type="hidden" name="lead_id" class="hidden" value="{{ $lead_id }}">
-<input type="hidden" name="list_id" class="hidden" value="{{ $list_id }}">
+<input type="hidden" name="list_id" id="list_id" class="hidden" value="{{ $list_id }}">
 <input type="hidden" name="closer" class="hidden" value="{{ $closer }}">
+
 <input type="hidden" name="fullname" class="hidden" value="{{ $fullname }}">
 <input type="hidden" name="vendor_id" class="hidden" value="{{ $vendor_id }}">
 <input type="hidden" name="gmt_offset_now" class="hidden" value="{{ $gmt_offset_now }}">
@@ -108,7 +103,7 @@
 <input type="hidden" name="uniqueid" class="hidden" value="{{ $uniqueid }}">
 <input type="hidden" name="customer_zap_channel" class="hidden" value="{{ $customer_zap_channel }}">
 <input type="hidden" name="customer_server_ip" class="hidden" value="{{ $customer_server_ip }}">
-<input type="hidden" name="serverip" class="hidden" value="{{ $server_ip }}">
+ <input type="hidden" name="serverip" id="server_ip" class="hidden" value="{{$server_ip}}">
 <input type="hidden" name="SIPexten" class="hidden" value="{{ $SIPexten }}">
 <input type="hidden" name="session_id" class="hidden" value="{{ $session_id }}">
 <input type="hidden" name="phone" class="hidden" value="{{ $phone }}">
@@ -118,7 +113,7 @@
 <input type="hidden" name="dialed_label" class="hidden" value="{{ $dialed_label }}">
 <input type="hidden" name="source_id" class="hidden" value="{{ $source_id }}">
 <input type="hidden" name="rank" class="hidden" value="{{ $rank }}">
-{{-- <input type="hidden" name="ownern" class="hidden" value="{{ $owner }}"> --}}
+<input type="hidden" name="ownern" class="hidden" value="{{ $owner }}">
 <input type="hidden" name="camp_script" class="hidden" value="{{ $camp_script }}">
 <input type="hidden" name="in_script" class="hidden" value="{{ $in_script }}">
 <input type="hidden" name="in_script_two" class="hidden" value="{{ $in_script_two }}">
@@ -177,51 +172,7 @@
                 </form>
                 <!-- Form end -->
             </div>
-            
-            <!-- Form end -->
-      
-    
 
-          <script src="script.js"></script>
-      
-        
-        <style>#xfer-form {
-            max-width: 500px;
-            margin: 40px auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-          }
-          
-          label {
-            display: block;
-            margin-bottom: 10px;
-          }
-          
-          input[type="text"], select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-          }
-          
-          button[type="submit"] {
-            background-color: #4CAF50;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-          }
-          
-          button[type="submit"]:hover {
-            background-color: #3e8e41;
-          }
-            </style>
-        <!-- Form end -->
-    </div><h1> Other Details </h1>
- 
 </body>
 </html>
 
